@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	cmd "github.com/mgiang2015/leet-buddy-go/cmd"
 )
 
 func main() {
@@ -16,5 +18,13 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 		}
 		fmt.Print("Received input: " + input)
+
+		output, err := cmd.RunCommand(input)
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+
+		fmt.Println(output)
 	}
 }
