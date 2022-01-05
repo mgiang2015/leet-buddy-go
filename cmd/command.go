@@ -11,6 +11,8 @@ type Command interface {
 	Execute() (string, error)
 }
 
+// format:
+// create -url url *required -d deadline (default 1 week from today) -done true/false (default false)
 type CreateCommand struct {
 	url      string
 	deadline time.Time
@@ -54,12 +56,26 @@ func (readCmd *ReadCommand) Execute() (string, error) {
 	return result, nil
 }
 
-func NewCreateCommand(url string, deadline time.Time, isDone bool) *CreateCommand {
+func newCreateCommand(url string, deadline time.Time, isDone bool) *CreateCommand {
 	return &CreateCommand{
 		url:      url,
 		deadline: deadline,
 		isDone:   isDone,
 	}
+}
+
+func NewCreateCommandUrlOnly(url string) *CreateCommand {
+	defDeadline := time.Now().AddDate(0, 0, 7) // default 7 days from now
+	defIsDone := false
+
+	return newCreateCommand(url, defDeadline, defIsDone)
+}
+
+func NewCreateCommandUrlDeadline(url string, dateOffset int) *CreateCommand {
+	defIsDone := false
+	deadline := time.Now().AddDate(0, 0, dateOffset)
+
+	return newCreateCommand(url, deadline, defIsDone)
 }
 
 func NewReadCommand() *ReadCommand {

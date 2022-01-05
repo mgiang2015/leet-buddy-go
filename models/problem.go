@@ -25,5 +25,5 @@ func NewProblem(url string, dealine time.Time, isDone bool) Problem {
 }
 
 func (p Problem) String() string {
-	return fmt.Sprintf("Url: %s, deadline: %v, isDone: %v\n", p.url, p.deadline, p.isDone)
+	return fmt.Sprintf("%d: Url: %s, deadline: %v, isDone: %v\n", p.model.GetId(), p.url, p.deadline, p.isDone)
 }
