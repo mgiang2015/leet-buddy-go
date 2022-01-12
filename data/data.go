@@ -41,3 +41,11 @@ func GetDatabase() Database {
 
 	return dbMaster
 }
+
+func ClearDatabase() {
+	if dbMaster == nil {
+		return
+	}
+
+	dbMaster = newDatabase()
+}
