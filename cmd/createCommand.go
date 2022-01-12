@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"strconv"
 	"time"
 
 	data "github.com/mgiang2015/leet-buddy-go/data"
@@ -23,18 +24,50 @@ func newCreateCommand(url string, deadline time.Time, isDone bool) *CreateComman
 	}
 }
 
-func NewCreateCommandUrlOnly(url string) *CreateCommand {
+func newCreateCommandUrlOnly(url string) *CreateCommand {
 	defDeadline := time.Now().AddDate(0, 0, 7) // default 7 days from now
 	defIsDone := false
 
 	return newCreateCommand(url, defDeadline, defIsDone)
 }
 
-func NewCreateCommandUrlDeadline(url string, dateOffset int) *CreateCommand {
+func newCreateCommandUrlDeadline(url string, dateOffset int) *CreateCommand {
 	defIsDone := false
 	deadline := time.Now().AddDate(0, 0, dateOffset)
 
 	return newCreateCommand(url, deadline, defIsDone)
+}
+
+func CreateCommandFromParams(params []string) *CreateCommand {
+	// -url: url
+	// -deadline: deadline
+	urlIndex := 0
+	deadlineIndex := 0
+
+	var outCmd *CreateCommand = nil
+
+	// find parameters
+	for index, param := range params {
+		if param == "-url" {
+			urlIndex = index + 1
+		} else if param == "-deadline" {
+			deadlineIndex = index + 1
+		}
+	}
+
+	if urlIndex == 0 {
+		outCmd = nil
+	} else if deadlineIndex == 0 {
+		outCmd = newCreateCommandUrlOnly(params[urlIndex])
+	} else {
+		dateOffset, err := strconv.Atoi(params[deadlineIndex])
+		if err != nil {
+			outCmd = nil
+		} else {
+			outCmd = newCreateCommandUrlDeadline(params[urlIndex], dateOffset)
+		}
+	}
+	return outCmd
 }
 
 func (createCmd *CreateCommand) Execute() (string, error) {

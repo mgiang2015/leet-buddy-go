@@ -24,6 +24,26 @@ func NewProblem(url string, dealine time.Time, isDone bool) Problem {
 	return newProblem
 }
 
+func (p *Problem) GetModel() Model {
+	return p.model
+}
+
+func (p *Problem) SetDeadline(newDeadline time.Time) {
+	p.deadline = newDeadline
+}
+
+func (p *Problem) GetIsDone() bool {
+	return p.isDone
+}
+
+func (p *Problem) GetDeadline() time.Time {
+	return p.deadline
+}
+
+func (p *Problem) SetIsDone(isDone bool) {
+	p.isDone = isDone
+}
+
 func (p Problem) String() string {
 	return fmt.Sprintf("%d: Url: %s, deadline: %v, isDone: %v\n", p.model.GetId(), p.url, p.deadline, p.isDone)
 }
